@@ -94,6 +94,15 @@ export default function Home() {
     }
   }
 
+  function handleBack() {
+    if (currentQuestion === 0) {
+      setScreen("intro");
+    } else {
+      setCurrentQuestion(currentQuestion - 1);
+      setAnswers(answers.slice(0, -1));
+    }
+  }
+
   function retake() {
     setScreen("intro");
     setCurrentQuestion(0);
@@ -126,9 +135,17 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-[#2C1A0E] flex items-center justify-center px-4">
         <div className="bg-[#F5ECD7] rounded-2xl shadow-xl max-w-lg w-full p-8">
-          <p className="text-[#8B5E3C] text-sm font-semibold mb-4 tracking-wide">
-            {currentQuestion + 1} of {questions.length}
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={handleBack}
+              className="text-[#8B5E3C] text-sm font-semibold hover:text-[#6B3A2A] transition-colors"
+            >
+              ← Back
+            </button>
+            <p className="text-[#8B5E3C] text-sm font-semibold tracking-wide">
+              {currentQuestion + 1} of {questions.length}
+            </p>
+          </div>
           <h2 className="font-[family-name:var(--font-lora)] text-2xl font-bold text-[#2C1A0E] mb-6">
             {q.question}
           </h2>
