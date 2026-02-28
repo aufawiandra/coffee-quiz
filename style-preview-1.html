@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style 1 - Playful & Colorful</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #f9a8d4, #a78bfa, #67e8f9);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .label {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      color: #7c3aed;
+      font-weight: 900;
+      font-size: 14px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      letter-spacing: 0.05em;
+    }
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 40px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+    }
+    .progress {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .progress-dot {
+      height: 8px;
+      border-radius: 999px;
+      flex: 1;
+      background: #e9d5ff;
+    }
+    .progress-dot.active { background: #7c3aed; }
+    .progress-dot.done { background: #a78bfa; }
+    .emoji { font-size: 48px; margin-bottom: 12px; }
+    .question {
+      font-size: 22px;
+      font-weight: 900;
+      color: #1e1b4b;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option {
+      background: #f5f3ff;
+      border: 3px solid transparent;
+      border-radius: 16px;
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      color: #4c1d95;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .option:hover { border-color: #7c3aed; background: #ede9fe; transform: translateY(-2px); }
+    .option.selected { border-color: #7c3aed; background: #ede9fe; }
+    .option-emoji { font-size: 22px; }
+    .next-btn {
+      margin-top: 28px;
+      width: 100%;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+    }
+    .step { font-size: 13px; color: #a78bfa; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
+  </style>
+</head>
+<body>
+  <div class="label">Style 1 — Playful & Colorful</div>
+  <div class="card">
+    <div class="progress">
+      <div class="progress-dot done"></div>
+      <div class="progress-dot done"></div>
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+    <div class="step">Question 3 of 5</div>
+    <div class="emoji">✈️</div>
+    <div class="question">Your ideal vacation looks like…</div>
+    <div class="options">
+      <div class="option">
+        <span class="option-emoji">🏔️</span> Backpacking through mountains with no plan
+      </div>
+      <div class="option selected">
+        <span class="option-emoji">🍰</span> A cozy cottage with good food and zero agenda
+      </div>
+      <div class="option">
+        <span class="option-emoji">🧘</span> A wellness retreat — yoga, juice, silence
+      </div>
+      <div class="option">
+        <span class="option-emoji">🎨</span> An artsy city with hidden cafés and galleries
+      </div>
+    </div>
+    <button class="next-btn">Next →</button>
+  </div>
+</body>
+</html>

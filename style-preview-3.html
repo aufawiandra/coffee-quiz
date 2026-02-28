@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style 3 - Bold & Dramatic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .label {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f59e0b;
+      color: #0a0a0a;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 6px 16px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .card {
+      max-width: 540px;
+      width: 100%;
+      padding: 48px 0;
+    }
+    .progress {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 48px;
+    }
+    .progress-seg {
+      height: 3px;
+      flex: 1;
+      background: #222;
+      border-radius: 2px;
+    }
+    .progress-seg.done { background: #f59e0b; }
+    .progress-seg.active { background: #f59e0b; opacity: 0.5; }
+    .step {
+      font-size: 12px;
+      color: #f59e0b;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .question {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: white;
+      margin-bottom: 40px;
+      line-height: 1.0;
+      letter-spacing: 0.02em;
+    }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option {
+      border: 1px solid #2a2a2a;
+      border-radius: 4px;
+      padding: 18px 22px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      color: #888;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .option:hover { border-color: #f59e0b; color: white; }
+    .option.selected { border-color: #f59e0b; color: white; background: #1a1500; }
+    .option-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      color: #f59e0b;
+      min-width: 24px;
+    }
+    .next-btn {
+      margin-top: 32px;
+      background: #f59e0b;
+      color: #0a0a0a;
+      border: none;
+      padding: 18px 36px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .next-btn:hover { background: #fbbf24; }
+  </style>
+</head>
+<body>
+  <div class="label">Style 3 — Bold & Dramatic</div>
+  <div class="card">
+    <div class="progress">
+      <div class="progress-seg done"></div>
+      <div class="progress-seg done"></div>
+      <div class="progress-seg active"></div>
+      <div class="progress-seg"></div>
+      <div class="progress-seg"></div>
+    </div>
+    <div class="step">Question 3 of 5</div>
+    <div class="question">Your ideal vacation looks like…</div>
+    <div class="options">
+      <div class="option"><span class="option-num">A</span> Backpacking through mountains with no plan</div>
+      <div class="option selected"><span class="option-num">B</span> A cozy cottage with good food and zero agenda</div>
+      <div class="option"><span class="option-num">C</span> A wellness retreat — yoga, juice, silence</div>
+      <div class="option"><span class="option-num">D</span> An artsy city with hidden cafés and galleries</div>
+    </div>
+    <button class="next-btn">Next Question →</button>
+  </div>
+</body>
+</html>
