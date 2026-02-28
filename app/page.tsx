@@ -83,6 +83,7 @@ export default function Home() {
   const [screen, setScreen] = useState<"intro" | "quiz" | "result">("intro");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<PersonalityId[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<PersonalityId | null>(null);
 
   function handleAnswer(personality: PersonalityId) {
     const newAnswers = [...answers, personality];
@@ -95,6 +96,7 @@ export default function Home() {
   }
 
   function handleBack() {
+    setSelectedAnswer(null);
     if (currentQuestion === 0) {
       setScreen("intro");
     } else {
@@ -107,6 +109,7 @@ export default function Home() {
     setScreen("intro");
     setCurrentQuestion(0);
     setAnswers([]);
+    setSelectedAnswer(null);
   }
 
   if (screen === "intro") {
@@ -132,6 +135,7 @@ export default function Home() {
 
   if (screen === "quiz") {
     const q = questions[currentQuestion];
+    const isFinal = currentQuestion === questions.length - 1;
     return (
       <div className="min-h-screen bg-[#2C1A0E] flex items-center justify-center px-4">
         <div className="bg-[#F5ECD7] rounded-2xl shadow-xl max-w-lg w-full p-8">
@@ -150,17 +154,35 @@ export default function Home() {
             {q.question}
           </h2>
           <div className="flex flex-col gap-3">
-            {q.options.map((opt) => (
-              <button
-                key={opt.personality}
-                onClick={() => handleAnswer(opt.personality)}
-                className="flex items-center gap-3 bg-[#F5ECD7] border-2 border-[#C9956B] text-[#2C1A0E] rounded-xl px-4 py-3 text-left hover:bg-[#EDD9B8] hover:border-[#6B3A2A] transition-colors"
-              >
-                <span className="text-2xl">{opt.emoji}</span>
-                <span className="text-base">{opt.text}</span>
-              </button>
-            ))}
+            {q.options.map((opt) => {
+              const isSelected = selectedAnswer === opt.personality;
+              return (
+                <button
+                  key={opt.personality}
+                  onClick={() =>
+                    isFinal ? setSelectedAnswer(opt.personality) : handleAnswer(opt.personality)
+                  }
+                  className={`flex items-center gap-3 border-2 rounded-xl px-4 py-3 text-left transition-colors text-[#2C1A0E] ${
+                    isSelected
+                      ? "bg-[#6B3A2A] border-[#6B3A2A] text-white"
+                      : "bg-[#F5ECD7] border-[#C9956B] hover:bg-[#EDD9B8] hover:border-[#6B3A2A]"
+                  }`}
+                >
+                  <span className="text-2xl">{opt.emoji}</span>
+                  <span className="text-base">{opt.text}</span>
+                </button>
+              );
+            })}
           </div>
+          {isFinal && (
+            <button
+              onClick={() => selectedAnswer && handleAnswer(selectedAnswer)}
+              disabled={!selectedAnswer}
+              className="mt-6 w-full bg-[#6B3A2A] text-white py-3 rounded-full text-lg font-semibold hover:bg-[#5a2f21] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              See My Result →
+            </button>
+          )}
         </div>
       </div>
     );
