@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { toPng } from "html-to-image";
 
 type PersonalityId = "BA" | "SE" | "HN" | "AS";
 
@@ -84,6 +85,19 @@ export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<PersonalityId[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<PersonalityId | null>(null);
+  const resultCardRef = useRef<HTMLDivElement>(null);
+
+  async function downloadResult() {
+    if (!resultCardRef.current) return;
+    const buttons = resultCardRef.current.querySelector<HTMLElement>(".no-snap");
+    if (buttons) buttons.style.display = "none";
+    const png = await toPng(resultCardRef.current, { cacheBust: true });
+    if (buttons) buttons.style.display = "";
+    const link = document.createElement("a");
+    link.download = "my-coffee-personality.png";
+    link.href = png;
+    link.click();
+  }
 
   function handleAnswer(personality: PersonalityId) {
     const newAnswers = [...answers, personality];
@@ -193,21 +207,31 @@ export default function Home() {
   const result = personalities[resultId];
   return (
     <div className="min-h-screen bg-[#2C1A0E] flex items-center justify-center px-4">
-      <div className="bg-[#F5ECD7] rounded-2xl shadow-xl max-w-lg w-full p-10 text-center">
-        <p className="text-[#8B5E3C] text-sm font-semibold mb-2 tracking-wide uppercase">Your result</p>
-        <h2 className="font-[family-name:var(--font-lora)] text-3xl font-bold text-[#2C1A0E] mb-2">
+      <div ref={resultCardRef} className="bg-[#F5ECD7] rounded-2xl shadow-xl max-w-lg w-full p-10 text-center">
+        <p className="font-[family-name:var(--font-lora)] text-[#6B3A2A] text-lg font-semibold">What&apos;s Your Coffee Personality?</p>
+        <hr className="border-[#C9956B] my-6" />
+        <p className="text-[#8B5E3C] text-xs font-semibold tracking-widest uppercase mb-3">Your result</p>
+        <h2 className="font-[family-name:var(--font-lora)] text-3xl font-bold text-[#2C1A0E] mb-4">
           You&apos;re a {result.name}!
         </h2>
-        <p className="text-[#5C3D2E] text-xl mb-1">
+        <p className="text-[#5C3D2E] text-xl mb-2">
           Your coffee: <span className="font-semibold">{result.coffee}</span>
         </p>
-        <p className="text-[#8B5E3C] italic text-lg mb-8">&ldquo;{result.tagline}&rdquo;</p>
-        <button
-          onClick={retake}
-          className="bg-[#6B3A2A] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#5a2f21] transition-colors"
-        >
-          Retake Quiz
-        </button>
+        <p className="text-[#8B5E3C] italic text-lg">&ldquo;{result.tagline}&rdquo;</p>
+        <div className="no-snap flex flex-col sm:flex-row gap-3 justify-center mt-8">
+          <button
+            onClick={retake}
+            className="bg-[#6B3A2A] text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#5a2f21] transition-colors"
+          >
+            Retake Quiz
+          </button>
+          <button
+            onClick={downloadResult}
+            className="border-2 border-[#6B3A2A] text-[#6B3A2A] px-8 py-3 rounded-full text-lg font-semibold hover:bg-[#6B3A2A] hover:text-white transition-colors"
+          >
+            Save as PNG
+          </button>
+        </div>
       </div>
     </div>
   );
