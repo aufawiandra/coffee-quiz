@@ -1,15 +1,17 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { toPng } from "html-to-image";
 
-type PersonalityId = "BA" | "SE" | "HN" | "AS";
+type PersonalityId = "BA" | "SE" | "HN" | "AS" | "NO" | "SB";
 
 const personalities: Record<PersonalityId, { name: string; coffee: string; tagline: string }> = {
   BA: { name: "Bold Adventurer", coffee: "Double Espresso", tagline: "You live for intensity" },
   SE: { name: "Sweet Enthusiast", coffee: "Caramel Latte", tagline: "Life's too short for bitter" },
   HN: { name: "Health Nut", coffee: "Oat Milk Americano", tagline: "Wellness in every sip" },
   AS: { name: "Artisan Snob", coffee: "Pour-Over, Single Origin", tagline: "You know what you like" },
+  NO: { name: "Night Owl", coffee: "Cold Brew", tagline: "You run on dark and late" },
+  SB: { name: "Social Butterfly", coffee: "Flat White", tagline: "Life's better shared" },
 };
 
 const questions = [
@@ -20,6 +22,8 @@ const questions = [
       { emoji: "🎬", text: "Rewatching a comfort show with snacks", personality: "SE" as PersonalityId },
       { emoji: "🌍", text: "Out somewhere new — you hate staying in", personality: "BA" as PersonalityId },
       { emoji: "📖", text: "Deep in a book or documentary about something obscure", personality: "AS" as PersonalityId },
+      { emoji: "🌙", text: "Still up at 2am doing who knows what", personality: "NO" as PersonalityId },
+      { emoji: "🎉", text: "Out with a big group, the more the merrier", personality: "SB" as PersonalityId },
     ],
   },
   {
@@ -29,6 +33,8 @@ const questions = [
       { emoji: "🧁", text: "Romantic comedies or baking competitions", personality: "SE" as PersonalityId },
       { emoji: "🔥", text: "Action thrillers or survival shows", personality: "BA" as PersonalityId },
       { emoji: "🎭", text: "Indie films or foreign language dramas", personality: "AS" as PersonalityId },
+      { emoji: "😴", text: "Whatever keeps you up until 4am", personality: "NO" as PersonalityId },
+      { emoji: "🍿", text: "Something to watch with a crowd", personality: "SB" as PersonalityId },
     ],
   },
   {
@@ -38,6 +44,8 @@ const questions = [
       { emoji: "🏡", text: "A cozy cottage with good food and zero agenda", personality: "SE" as PersonalityId },
       { emoji: "🏔️", text: "Backpacking with no plan and a one-way ticket", personality: "BA" as PersonalityId },
       { emoji: "🎨", text: "An artsy city with hidden cafés and galleries", personality: "AS" as PersonalityId },
+      { emoji: "🌃", text: "A city that never sleeps — nightlife, late eats", personality: "NO" as PersonalityId },
+      { emoji: "🗺️", text: "A group trip, the bigger the squad the better", personality: "SB" as PersonalityId },
     ],
   },
   {
@@ -47,6 +55,8 @@ const questions = [
       { emoji: "😋", text: "Take a sip — it smells sweet, you're in", personality: "SE" as PersonalityId },
       { emoji: "😏", text: "Drink it without asking — you live dangerously", personality: "BA" as PersonalityId },
       { emoji: "🤨", text: "Smell it first, then ask where it's sourced from", personality: "AS" as PersonalityId },
+      { emoji: "🌚", text: "Drink it — you're wide awake anyway", personality: "NO" as PersonalityId },
+      { emoji: "👯", text: "Pass it around and let everyone try it first", personality: "SB" as PersonalityId },
     ],
   },
   {
@@ -56,6 +66,8 @@ const questions = [
       { emoji: "🛌", text: "Slow start, cozy blanket, something sweet", personality: "SE" as PersonalityId },
       { emoji: "⚡", text: "Up early, straight into it — no warmup needed", personality: "BA" as PersonalityId },
       { emoji: "☕", text: "Deliberate ritual — grind the beans, pour slowly, savor it", personality: "AS" as PersonalityId },
+      { emoji: "🛏️", text: "What morning? You're still asleep", personality: "NO" as PersonalityId },
+      { emoji: "📱", text: "Check all your messages before getting up", personality: "SB" as PersonalityId },
     ],
   },
   {
@@ -65,12 +77,36 @@ const questions = [
       { emoji: "🌸", text: "Dusty rose", personality: "SE" as PersonalityId },
       { emoji: "🔴", text: "Deep red", personality: "BA" as PersonalityId },
       { emoji: "🤍", text: "Off-white / cream", personality: "AS" as PersonalityId },
+      { emoji: "🖤", text: "Midnight black", personality: "NO" as PersonalityId },
+      { emoji: "🧡", text: "Warm orange", personality: "SB" as PersonalityId },
+    ],
+  },
+  {
+    question: "How do you recharge after a long day?",
+    options: [
+      { emoji: "🧘", text: "Stretch, journal, early bed", personality: "HN" as PersonalityId },
+      { emoji: "🍿", text: "Netflix and snacks on the couch", personality: "SE" as PersonalityId },
+      { emoji: "🏍️", text: "Spontaneous drive or night out", personality: "BA" as PersonalityId },
+      { emoji: "🎧", text: "Deep dive into an obscure hobby", personality: "AS" as PersonalityId },
+      { emoji: "🌙", text: "Stay up late — your brain wakes up at night", personality: "NO" as PersonalityId },
+      { emoji: "📲", text: "Call or hang out with friends", personality: "SB" as PersonalityId },
+    ],
+  },
+  {
+    question: "Pick a weekend morning vibe:",
+    options: [
+      { emoji: "🥗", text: "Farmer's market then meal prep", personality: "HN" as PersonalityId },
+      { emoji: "🛌", text: "Sleep in, slow brunch, no plans", personality: "SE" as PersonalityId },
+      { emoji: "🏄", text: "Up early for an adventure", personality: "BA" as PersonalityId },
+      { emoji: "☕", text: "Coffee ritual, reading, intentional quiet", personality: "AS" as PersonalityId },
+      { emoji: "😴", text: "Awake at noon, no regrets", personality: "NO" as PersonalityId },
+      { emoji: "🥂", text: "Brunch with the whole crew", personality: "SB" as PersonalityId },
     ],
   },
 ];
 
 function getResult(answers: PersonalityId[]): PersonalityId {
-  const counts: Record<PersonalityId, number> = { BA: 0, SE: 0, HN: 0, AS: 0 };
+  const counts: Record<PersonalityId, number> = { BA: 0, SE: 0, HN: 0, AS: 0, NO: 0, SB: 0 };
   for (const a of answers) counts[a]++;
   const max = Math.max(...Object.values(counts));
   // Tie-break: first occurrence
@@ -86,6 +122,13 @@ export default function Home() {
   const [answers, setAnswers] = useState<PersonalityId[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<PersonalityId | null>(null);
   const resultCardRef = useRef<HTMLDivElement>(null);
+
+  const shuffledQuestions = useMemo(() =>
+    questions.map(q => ({
+      ...q,
+      options: [...q.options].sort(() => Math.random() - 0.5),
+    }))
+  , []);
 
   async function downloadResult() {
     if (!resultCardRef.current) return;
@@ -134,7 +177,7 @@ export default function Home() {
             What&apos;s Your Coffee Personality?
           </h1>
           <p className="text-[#5C3D2E] text-lg mb-8">
-            Answer 6 quick questions and we&apos;ll match you with your perfect brew.
+            Answer 8 quick questions and we&apos;ll match you with your perfect brew.
           </p>
           <button
             onClick={() => setScreen("quiz")}
@@ -148,10 +191,10 @@ export default function Home() {
   }
 
   if (screen === "quiz") {
-    const q = questions[currentQuestion];
-    const isFinal = currentQuestion === questions.length - 1;
+    const q = shuffledQuestions[currentQuestion];
+    const isFinal = currentQuestion === shuffledQuestions.length - 1;
     return (
-      <div className="min-h-screen bg-[#2C1A0E] flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#2C1A0E] flex items-center justify-center px-4 py-8">
         <div className="bg-[#F5ECD7] rounded-2xl shadow-xl max-w-lg w-full p-8">
           <div className="flex items-center justify-between mb-4">
             <button
@@ -161,7 +204,7 @@ export default function Home() {
               ← Back
             </button>
             <p className="text-[#8B5E3C] text-sm font-semibold tracking-wide">
-              {currentQuestion + 1} of {questions.length}
+              {currentQuestion + 1} of {shuffledQuestions.length}
             </p>
           </div>
           <h2 className="font-[family-name:var(--font-lora)] text-2xl font-bold text-[#2C1A0E] mb-6">
